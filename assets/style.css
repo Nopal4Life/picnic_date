@@ -1,0 +1,673 @@
+@import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&display=swap");
+
+/* Hello Kitty "yes" celebration. Streamlit container key "jump_gif" -> .st-key-jump_gif */
+
+.st-key-jump_gif {
+  display: flex;
+  justify-content: center;
+  padding-top: 1.25rem; /* headroom for the jump */
+  margin-bottom: 0;
+}
+
+.st-key-jump_gif .kitty {
+  position: relative;
+  width: 147px; /* 21px sprite at 7x, so every pixel stays crisp */
+  transform-origin: 50% 100%;
+  animation: kitty-jump 0.8s ease-in-out infinite;
+}
+
+/* body sways side to side; the arms are separate layers pivoting at the shoulder */
+.st-key-jump_gif .kitty .dancer {
+  position: relative;
+  transform-origin: 50% 100%;
+  animation: kitty-sway 1.6s ease-in-out infinite;
+}
+.st-key-jump_gif .kitty .dancer img {
+  display: block;
+  max-width: none;
+  image-rendering: pixelated;
+}
+.st-key-jump_gif .kitty .body { width: 100%; }
+.st-key-jump_gif .kitty .arm {
+  position: absolute;
+  top: 54.17%;   /* row 13 of 24 */
+  width: 19.05%; /* 4 of 21 columns */
+}
+.st-key-jump_gif .kitty .arm-l {
+  left: 9.52%;   /* column 2 */
+  transform-origin: 87.5% 21%;
+  animation: arm-l 1.6s ease-in-out infinite;
+}
+.st-key-jump_gif .kitty .arm-r {
+  left: 71.43%;  /* column 15 */
+  transform-origin: 12.5% 21%;
+  animation: arm-r 1.6s ease-in-out infinite;
+}
+
+@keyframes kitty-sway {
+  0%, 100% { transform: rotate(-4deg); }
+  50%      { transform: rotate(4deg); }
+}
+
+/* two jumps per cycle (apexes at 25% and 75%): arms swing up on each, one higher than the other */
+@keyframes arm-l {
+  0%, 100% { transform: rotate(8deg); }
+  12%      { transform: rotate(20deg); }
+  25%      { transform: rotate(140deg); }
+  42%, 55% { transform: rotate(12deg); }
+  75%      { transform: rotate(65deg); }
+  90%      { transform: rotate(12deg); }
+}
+@keyframes arm-r {
+  0%, 100% { transform: rotate(-8deg); }
+  12%      { transform: rotate(-20deg); }
+  25%      { transform: rotate(-65deg); }
+  42%, 55% { transform: rotate(-12deg); }
+  75%      { transform: rotate(-140deg); }
+  90%      { transform: rotate(-12deg); }
+}
+
+/* squash on the ground, stretch in the air */
+@keyframes kitty-jump {
+  0%, 100% { transform: translateY(0) scale(1.08, 0.92); }
+  15%      { transform: translateY(0) scale(0.95, 1.06); }
+  50%      { transform: translateY(-36px) scale(1, 1); }
+  85%      { transform: translateY(0) scale(0.95, 1.06); }
+}
+
+/* little hearts drifting up from her head */
+.st-key-jump_gif .kitty .float-heart {
+  position: absolute;
+  bottom: 75%;
+  left: var(--x);
+  width: var(--size);
+  opacity: 0;
+  pointer-events: none;
+  animation: heart-float 2.4s ease-out infinite;
+  animation-delay: var(--delay);
+}
+
+.st-key-jump_gif .kitty .float-heart svg {
+  display: block;
+  width: 100%;
+  fill: var(--c);
+}
+
+@keyframes heart-float {
+  0%   { opacity: 0;   transform: translateY(0) scale(0.6); }
+  15%  { opacity: 1; }
+  100% { opacity: 0;   transform: translateY(-70px) translateX(var(--drift)) scale(1.1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .st-key-jump_gif .kitty,
+  .st-key-jump_gif .kitty .dancer,
+  .st-key-jump_gif .kitty .arm,
+  .st-key-jump_gif .kitty .float-heart { animation: none; }
+}
+
+/* Yes screen: swap the page background for the wallpaper (tiled, pixels stay crisp) */
+.stApp:has(.st-key-jump_gif) {
+  background: var(--yes-wallpaper) repeat top left / 399px auto;
+}
+.stApp:has(.st-key-jump_gif) [data-testid="stHeader"] {
+  background: transparent;
+}
+/* soft white card so the title and text stay readable over the pattern */
+.stApp:has(.st-key-jump_gif) .block-container {
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: 1.5rem;
+  margin-top: 1rem;
+  padding: 1.5rem 2rem 2.5rem;
+  max-width: 640px;
+}
+
+/* ---------- theme: script font + picnic palette (sky, bow pink, grass, outline brown) ---------- */
+:root {
+  --kitty-ink: #6b4a45;
+  --kitty-pink: #ff8fc0;
+  --kitty-pink-deep: #e8559a;
+  --kitty-sky: #a9ddf2;
+  --kitty-sky-deep: #5fb7e0;
+  --kitty-grass: #c4eb9a;
+}
+
+.stApp h1 {
+  font-family: "Dancing Script", cursive;
+  font-weight: 700;
+  color: var(--kitty-pink-deep);
+  text-align: center;
+  text-shadow: 2px 2px 0 #fff, 4px 4px 0 rgba(107, 74, 69, 0.18);
+  line-height: 1.2;
+}
+
+/* choice screen only (the yes_btn key exists only there): sky-to-grass backdrop + card */
+.stApp:has(.st-key-yes_btn) {
+  background: linear-gradient(180deg, var(--kitty-sky) 0%, #dff3fb 55%, var(--kitty-grass) 100%);
+}
+.stApp:has(.st-key-yes_btn) [data-testid="stHeader"] {
+  background: transparent;
+}
+.stApp:has(.st-key-yes_btn) .block-container {
+  background: rgba(255, 255, 255, 0.7);
+  border: 3px solid #fff;
+  border-radius: 1.5rem;
+  box-shadow: 0 6px 0 rgba(107, 74, 69, 0.15);
+  margin-top: 2rem;
+  padding: 2rem 2rem 3rem;
+  max-width: 640px;
+}
+
+.st-key-couple_img {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+.st-key-couple_img [data-testid="stFullScreenFrame"],
+.st-key-couple_img [data-testid="stElementContainer"],
+.st-key-couple_img [data-testid="stImage"] {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+/* the source is a tall phone wallpaper: crop to the couple + picnic blanket */
+.st-key-couple_img img {
+  width: 360px !important;
+  max-width: 100%;
+  height: 280px;
+  object-fit: cover;
+  object-position: 50% 58%;
+  border: 4px solid var(--kitty-ink);
+  border-radius: 1.25rem;
+  box-shadow: 0 6px 0 var(--kitty-pink);
+}
+
+/* buttons */
+.st-key-yes_btn button,
+.st-key-no_btn button {
+  font-family: "Dancing Script", cursive;
+  border: 3px solid var(--kitty-ink) !important;
+  border-radius: 999px;
+  color: var(--kitty-ink) !important;
+  box-shadow: 0 5px 0 var(--kitty-ink);
+  transition: transform 0.3s cubic-bezier(0.34, 1.8, 0.5, 1), box-shadow 0.12s;
+}
+.st-key-yes_btn button p,
+.st-key-no_btn button p {
+  font-family: "Dancing Script", cursive;
+  font-weight: 700;
+}
+.st-key-yes_btn button { background: var(--kitty-pink) !important; }
+.st-key-no_btn button  { background: var(--kitty-sky) !important; }
+.st-key-no_btn button p { font-size: 1.5rem; }
+
+.st-key-yes_btn button:hover,
+.st-key-no_btn button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 7px 0 var(--kitty-ink);
+}
+.st-key-yes_btn button:hover { background: #ffa6cc !important; }
+.st-key-no_btn button:hover  { background: #bfe6f6 !important; }
+.st-key-yes_btn button:active,
+.st-key-no_btn button:active {
+  transform: translateY(4px) scale(0.92, 0.88);
+  box-shadow: 0 1px 0 var(--kitty-ink);
+  transition-duration: 0.06s;
+}
+
+/* center each button in its column */
+.st-key-yes_btn,
+.st-key-no_btn {
+  display: flex;
+  justify-content: center;
+}
+.st-key-yes_btn button,
+.st-key-no_btn button {
+  padding: 0.25rem 1.75rem;
+}
+
+.stApp:has(.st-key-yes_btn) [data-testid="stColumn"] > div {
+  align-items: center;
+}
+
+/* ---------- yes screen layout ---------- */
+.st-key-jump_gif [data-testid="stFullScreenFrame"],
+.st-key-jump_gif [data-testid="stElementContainer"],
+.st-key-jump_gif [data-testid="stMarkdown"],
+.st-key-jump_gif [data-testid="stMarkdownContainer"],
+.st-key-jump_gif [data-testid="stImage"] {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.stApp:has(.st-key-jump_gif) h1 {
+  margin-bottom: 0;
+}
+
+/* cutesy details table */
+table.details {
+  width: 100%;
+  max-width: 460px;
+  margin: 1rem auto 0;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 3px solid var(--kitty-ink);
+  border-radius: 1.25rem;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 6px 0 var(--kitty-pink);
+}
+table.details tr + tr th,
+table.details tr + tr td {
+  border-top: 2px dashed #f4b6d2;
+}
+table.details th,
+table.details td {
+  padding: 0.9rem 1.1rem;
+  vertical-align: middle;
+  color: var(--kitty-ink);
+  text-align: left;
+}
+table.details th {
+  width: 7rem;
+  background: var(--kitty-pink);
+  border-right: 3px solid var(--kitty-ink);
+  font-family: "Dancing Script", cursive;
+  font-size: 1.6rem;
+  font-weight: 700;
+  text-align: center;
+  white-space: nowrap;
+}
+table.details td {
+  font-size: 1.05rem;
+  line-height: 1.35;
+  background: repeating-linear-gradient(45deg, #fff 0 10px, #fff6fa 10px 20px);
+}
+
+/* ---------- the "No" button flees (effects.js sets `translate` on press) ---------- */
+.st-key-no_btn {
+  position: relative;
+  z-index: 5;
+  transition: translate 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ---------- drifting hearts, clouds and sparkles (effects.js spawns them) ---------- */
+#kitty-ambient {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+/* lift the app above the ambient layer so the cards float over it */
+[data-testid="stAppViewContainer"] {
+  position: relative;
+  z-index: 1;
+}
+
+.amb {
+  position: absolute;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+.amb svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  fill: var(--c, #fff);
+}
+
+.amb-heart {
+  left: var(--x);
+  bottom: -40px;
+  width: var(--s);
+  height: var(--s);
+  animation: amb-rise var(--dur) linear forwards;
+}
+@keyframes amb-rise {
+  0%   { opacity: 0;    transform: translate(0, 0) rotate(-10deg); }
+  10%  { opacity: 0.8; }
+  90%  { opacity: 0.8; }
+  100% { opacity: 0;    transform: translate(var(--drift), -115vh) rotate(10deg); }
+}
+
+.amb-sparkle {
+  left: var(--x);
+  top: var(--y);
+  width: var(--s);
+  height: var(--s);
+  animation: amb-twinkle var(--dur) ease-in-out forwards;
+}
+@keyframes amb-twinkle {
+  0%   { opacity: 0;   transform: scale(0.2) rotate(0deg); }
+  50%  { opacity: 0.9; transform: scale(1) rotate(45deg); }
+  100% { opacity: 0;   transform: scale(0.2) rotate(90deg); }
+}
+
+.amb-cloud {
+  --c: #fff;
+  left: 0;
+  top: var(--y);
+  width: var(--s);
+  height: calc(var(--s) / 2);
+  filter: drop-shadow(0 4px 0 rgba(169, 221, 242, 0.55));
+  animation: amb-cross var(--dur) linear var(--delay, 0s) forwards;
+}
+@keyframes amb-cross {
+  0%   { opacity: 0;    transform: translateX(-25vw); }
+  8%   { opacity: 0.85; }
+  92%  { opacity: 0.85; }
+  100% { opacity: 0;    transform: translateX(115vw); }
+}
+
+/* ---------- finger sparkle trail + tap bursts + confetti ---------- */
+#kitty-fx {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 10000;
+}
+.fx-particle {
+  position: absolute;
+  will-change: transform, opacity;
+}
+.fx-particle svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+#kitty-confetti {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 10001;
+}
+
+/* ---------- shimmer on the glass cards ---------- */
+.stApp:has(.st-key-yes_btn, .st-key-jump_gif) .block-container {
+  position: relative;
+}
+.stApp:has(.st-key-yes_btn, .st-key-jump_gif) .block-container > * {
+  position: relative; /* keep content above the shimmer */
+}
+.stApp:has(.st-key-yes_btn, .st-key-jump_gif) .block-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.7) 47%,
+    rgba(255, 214, 235, 0.55) 53%,
+    transparent 65%
+  );
+  background-size: 300% 100%;
+  animation: card-shimmer 7s ease-in-out infinite;
+}
+@keyframes card-shimmer {
+  0%   { background-position: 0% 0; }
+  65%  { background-position: 100% 0; }
+  100% { background-position: 100% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #kitty-ambient { display: none; }
+  .stApp:has(.st-key-yes_btn, .st-key-jump_gif) .block-container::before { animation: none; }
+}
+
+/* ---------- plan-our-picnic form ---------- */
+.st-key-plan_btn,
+.st-key-send_btn,
+.st-key-retry_btn,
+.st-key-ics_btn {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.25rem;
+}
+.st-key-plan_btn button,
+.st-key-send_btn button,
+.st-key-retry_btn button,
+.st-key-ics_btn button {
+  font-family: "Dancing Script", cursive;
+  border: 3px solid var(--kitty-ink) !important;
+  border-radius: 999px;
+  color: var(--kitty-ink) !important;
+  box-shadow: 0 5px 0 var(--kitty-ink);
+  padding: 0.25rem 2rem;
+  transition: transform 0.3s cubic-bezier(0.34, 1.8, 0.5, 1), box-shadow 0.12s;
+}
+.st-key-plan_btn button p,
+.st-key-send_btn button p,
+.st-key-retry_btn button p,
+.st-key-ics_btn button p {
+  font-family: "Dancing Script", cursive;
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+.st-key-plan_btn button,
+.st-key-retry_btn button,
+.st-key-ics_btn button { background: var(--kitty-grass) !important; }
+.st-key-send_btn button { background: var(--kitty-pink) !important; }
+.st-key-plan_btn button:hover,
+.st-key-send_btn button:hover,
+.st-key-retry_btn button:hover,
+.st-key-ics_btn button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 7px 0 var(--kitty-ink);
+}
+.st-key-plan_btn button:active,
+.st-key-send_btn button:active,
+.st-key-retry_btn button:active,
+.st-key-ics_btn button:active {
+  transform: translateY(4px) scale(0.92, 0.88);
+  box-shadow: 0 1px 0 var(--kitty-ink);
+  transition-duration: 0.06s;
+}
+
+:is(.st-key-plan_fields, .st-key-email_box) {
+  max-width: 460px;
+  margin: 1.25rem auto 0;
+  padding: 1.25rem 1.5rem 1.5rem;
+  background: #fff;
+  border: 3px solid var(--kitty-ink);
+  border-radius: 1.25rem;
+  box-shadow: 0 6px 0 var(--kitty-pink);
+}
+.form-title {
+  font-family: "Dancing Script", cursive;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--kitty-pink-deep);
+  text-align: center;
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+}
+:is(.st-key-plan_fields, .st-key-email_box) label p {
+  font-family: "Dancing Script", cursive;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--kitty-ink);
+}
+:is(.st-key-plan_fields, .st-key-email_box) [data-baseweb="input"],
+:is(.st-key-plan_fields, .st-key-email_box) [data-baseweb="textarea"],
+:is(.st-key-plan_fields, .st-key-email_box) [data-baseweb="base-input"] {
+  background: #fff6fa !important;
+  border: 2px solid var(--kitty-ink) !important;
+  border-radius: 0.9rem !important;
+}
+:is(.st-key-plan_fields, .st-key-email_box) [data-baseweb="input"] > div,
+:is(.st-key-plan_fields, .st-key-email_box) [data-baseweb="textarea"] > div,
+:is(.st-key-plan_fields, .st-key-email_box) input,
+:is(.st-key-plan_fields, .st-key-email_box) textarea {
+  background: transparent !important;
+  color: var(--kitty-ink);
+}
+:is(.st-key-plan_fields, .st-key-email_box) [data-baseweb="input"]:focus-within,
+:is(.st-key-plan_fields, .st-key-email_box) [data-baseweb="textarea"]:focus-within {
+  border-color: var(--kitty-pink-deep) !important;
+  box-shadow: 0 0 0 3px rgba(255, 143, 192, 0.35);
+}
+:is(.st-key-plan_fields, .st-key-email_box) ::placeholder {
+  color: #b99a95;
+}
+
+/* confirmation */
+.sent-card {
+  max-width: 460px;
+  margin: 1.25rem auto 0;
+  padding: 1rem 1.5rem 1.25rem;
+  background: #fff;
+  border: 3px solid var(--kitty-ink);
+  border-radius: 1.25rem;
+  box-shadow: 0 6px 0 var(--kitty-grass);
+  text-align: center;
+  color: var(--kitty-ink);
+}
+.sent-card p {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.4;
+}
+table.details.requests {
+  margin-top: 1.5rem;
+}
+table.details.requests td {
+  word-break: break-word;
+}
+.st-key-send_btn,
+.st-key-retry_btn {
+  width: 100%;
+  align-self: stretch;
+}
+.st-key-plan_btn {
+  width: 100%;
+  align-self: stretch;
+}
+
+/* equal-width pills, centered (the wrappers are full width) */
+.st-key-plan_btn button,
+.st-key-send_btn button,
+.st-key-retry_btn button,
+.st-key-ics_btn button {
+  width: 18rem;
+  max-width: 100%;
+}
+.st-key-plan_btn,
+.st-key-send_btn {
+  margin-top: 1rem;
+}
+.st-key-plan_btn [data-testid="stButton"],
+.st-key-send_btn [data-testid="stButton"],
+.st-key-retry_btn [data-testid="stButton"] {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+.st-key-ics_btn {
+  width: 100%;
+  align-self: stretch;
+  margin-top: 1rem;
+}
+.st-key-ics_btn [data-testid="stDownloadButton"] {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+/* the sms: link, styled as a pill button (opens Messages with the text already written) */
+.quick-action {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.25rem;
+}
+a.pill-link {
+  display: block;
+  box-sizing: border-box;
+  width: 18rem;
+  max-width: 100%;
+  padding: 0.5rem 2rem;
+  background: var(--kitty-pink);
+  border: 3px solid var(--kitty-ink);
+  border-radius: 999px;
+  box-shadow: 0 5px 0 var(--kitty-ink);
+  color: var(--kitty-ink) !important;
+  font-family: "Dancing Script", cursive;
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: center;
+  text-decoration: none !important;
+  transition: transform 0.3s cubic-bezier(0.34, 1.8, 0.5, 1), box-shadow 0.12s;
+}
+a.pill-link:active {
+  transform: translateY(4px) scale(0.92, 0.88);
+  box-shadow: 0 1px 0 var(--kitty-ink);
+  transition-duration: 0.06s;
+}
+.sent-card p.fine-print {
+  margin-top: 0.6rem;
+  font-size: 0.8rem;
+  color: #b99a95;
+}
+
+/* ---------- iPhone / small screens ---------- */
+button,
+a.pill-link {
+  touch-action: manipulation; /* no double-tap zoom delay on the buttons */
+  -webkit-tap-highlight-color: transparent;
+}
+.stApp [data-testid="stForm"] input,
+.stApp :is(.st-key-plan_fields, .st-key-email_box) input,
+.stApp :is(.st-key-plan_fields, .st-key-email_box) textarea {
+  font-size: 16px; /* anything smaller makes iOS Safari zoom in on focus */
+}
+
+@media (max-width: 640px) {
+  .stApp:has(.st-key-yes_btn, .st-key-jump_gif) .block-container {
+    margin: 0.5rem 0.5rem 1rem;
+    padding: 1rem 1rem 2rem;
+    max-width: none;
+  }
+  .stApp h1 {
+    font-size: 2.1rem;
+  }
+  .st-key-couple_img img {
+    width: min(360px, calc(100vw - 6rem)) !important; /* the wrapper shrinks to fit, so % would collapse */
+    height: 240px;
+  }
+  .st-key-yes_btn button,
+  .st-key-no_btn button {
+    padding: 0.25rem 1.25rem;
+  }
+  table.details th {
+    width: 4.75rem;
+    padding: 0.7rem 0.5rem;
+    font-size: 1.35rem;
+  }
+  table.details td {
+    padding: 0.7rem 0.8rem;
+    font-size: 1rem;
+  }
+  :is(.st-key-plan_fields, .st-key-email_box) {
+    padding: 1rem;
+  }
+}
+
+.field-error {
+  margin: 0.5rem 0 0;
+  text-align: center;
+  font-size: 0.95rem;
+  color: var(--kitty-pink-deep);
+}
+:is(.st-key-plan_fields, .st-key-email_box) .form-title {
+  font-size: 1.6rem;
+}
+.st-key-email_box {
+  margin-bottom: 0.25rem;
+}

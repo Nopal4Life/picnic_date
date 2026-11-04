@@ -218,3 +218,10 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# picnic app
+.DS_Store
+.streamlit/secrets.toml
+.streamlit/secrets.toml.bak
+client_secret*.json
+submissions.jsonl
